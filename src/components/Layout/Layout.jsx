@@ -9,8 +9,9 @@ import {
 } from './Layout.styled';
 
 const StyledLink = styled(NavLink)`
-  color: #2121;
-
+  color: #212121;
+  list-style: none;
+  text-decoration: none;
   &.active {
     color: orange;
   }

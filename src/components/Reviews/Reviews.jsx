@@ -2,6 +2,16 @@ import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { fetchMovieReviews } from 'services/MovieAPI';
 
+import {
+  Container,
+  Title,
+  ReviewList,
+  ReviewItem,
+  Author,
+  Content,
+  FullReviewLink,
+} from './Reviews.styled';
+
 const Reviews = () => {
   const { movieId } = useParams();
   const [reviews, setReviews] = useState([]);
@@ -16,28 +26,28 @@ const Reviews = () => {
   }, [movieId]);
 
   return (
-    <div>
-      <h2>Reviews</h2>
-      <div>
+    <Container>
+      <Title>Reviews</Title>
+      <ReviewList>
         {reviews.length > 0 ? (
           reviews.map(review => (
-            <div key={review.id}>
-              <p>Author: {review.author}</p>
-              <p>{review.content}</p>
-              <a
+            <ReviewItem key={review.id}>
+              <Author>Author: {review.author}</Author>
+              <Content>{review.content}</Content>
+              <FullReviewLink
                 href={`https://www.themoviedb.org/review/${review.id}`}
                 target="_blank"
                 rel="noopener noreferrer"
               >
                 Read Full Review
-              </a>
-            </div>
+              </FullReviewLink>
+            </ReviewItem>
           ))
         ) : (
           <p>No reviews found.</p>
         )}
-      </div>
-    </div>
+      </ReviewList>
+    </Container>
   );
 };
 

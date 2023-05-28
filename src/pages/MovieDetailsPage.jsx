@@ -2,6 +2,20 @@ import React, { useEffect, useState, useRef, Suspense } from 'react';
 import { Link, Outlet, useParams, useLocation } from 'react-router-dom';
 import { fetchMovieDetails } from 'services/MovieAPI';
 
+import {
+  Container,
+  Title,
+  MovieDetails,
+  MovieImage,
+  MovieInfo,
+  UserScore,
+  Overview,
+  Genres,
+  AdditionalInfo,
+  AdditionalLinks,
+  AdditionalLink,
+} from './MovieDetailsPage.styled';
+
 const MovieDetailsPage = () => {
   const { movieId } = useParams();
   const [movieDetails, setMovieDetails] = useState(null);
@@ -24,40 +38,40 @@ const MovieDetailsPage = () => {
   const { title, release_date, poster_path, overview, genres } = movieDetails;
   const userScore = movieDetails.vote_average * 10;
   return (
-    <div>
+    <Container>
       <Link to={backLinkLocationRef.current}>Go back</Link>
-      <h1>
+      <Title>
         {title} <span>({release_date})</span>
-      </h1>
-      <div>
+      </Title>
+      <MovieDetails>
         <div>
-          <img
+          <MovieImage
             src={`https://image.tmdb.org/t/p/w300${poster_path}`}
             alt={title}
           />
         </div>
-        <div>
-          <p>User Score: {userScore}%</p>
-          <p>Overview: {overview}</p>
-          <p>Genres: {genres.map(genre => genre.name).join(', ')}</p>
-        </div>
-      </div>
+        <MovieInfo>
+          <UserScore>User Score: {userScore}%</UserScore>
+          <Overview>Overview: {overview}</Overview>
+          <Genres>Genres: {genres.map(genre => genre.name).join(', ')}</Genres>
+        </MovieInfo>
+      </MovieDetails>
 
-      <div>
+      <AdditionalInfo>
         <h2>Aditionali</h2>
-        <ul>
-          <li>
+        <AdditionalLinks>
+          <AdditionalLink>
             <Link to="cast">Cast</Link>
-          </li>
-          <li>
+          </AdditionalLink>
+          <AdditionalLink>
             <Link to="reviews">Reviews</Link>
-          </li>
-        </ul>
+          </AdditionalLink>
+        </AdditionalLinks>
         <Suspense fallback={<div>Loading...</div>}>
           <Outlet />
         </Suspense>
-      </div>
-    </div>
+      </AdditionalInfo>
+    </Container>
   );
 };
 
