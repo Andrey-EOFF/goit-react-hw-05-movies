@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Link, useLocation, useSearchParams } from 'react-router-dom';
+import { fetchMoviesSearch } from 'services/MovieAPI';
 
 const MovieSearchPage = () => {
   const [searchResults, setSearchResults] = useState([]);
@@ -7,28 +8,20 @@ const MovieSearchPage = () => {
   const location = useLocation();
 
   useEffect(() => {
-    const fetchMoviesSearch = async () => {
-      try {
-        const apiKey = 'af8f22ea7957eefc6025d5ff3672559f';
-        const response = await fetch(
-          `https://api.themoviedb.org/3/search/movie?api_key=${apiKey}&query=${searchParams.get(
-            'query'
-          )}`
-        );
-        const data = await response.json();
-        setSearchResults(data.results);
-      } catch (error) {
-        console.error('Error searching movies:', error);
+    const fetchMovies = async () => {
+      const query = searchParams.get('query');
+
+      if (query && query.trim() !== '') {
+        const searchResults = await fetchMoviesSearch(query);
+        setSearchResults(searchResults);
+      } else {
+        setSearchResults([]);
       }
     };
 
-    if (searchParams.get('query') && searchParams.get('query').trim() !== '') {
-      fetchMoviesSearch();
-    } else {
-      setSearchResults([]);
-    }
+    fetchMovies();
   }, [searchParams]);
-
+  
   const handleSubmit = event => {
     event.preventDefault();
     const searchValueId = event.target.value;

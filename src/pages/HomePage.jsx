@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
+import { fetchMoviesTrending } from 'services/MovieAPI';
 
 const HomePage = () => {
   const [movies, setMovies] = useState([]);
@@ -7,21 +8,13 @@ const HomePage = () => {
   const location = useLocation();
 
   useEffect(() => {
-    const fetchMoviesTrending = async () => {
-      try {
-        const apiKey = 'af8f22ea7957eefc6025d5ff3672559f';
-        const response = await fetch(
-          `https://api.themoviedb.org/3/trending/movie/day?api_key=${apiKey}`
-        );
-        const data = await response.json();
-        setMovies(data.results);
-      } catch (error) {
-        console.error('Error fetching movies:', error);
-      }
+    const fetchMovies = async () => {
+      const trendingMovies = await fetchMoviesTrending();
+      setMovies(trendingMovies);
     };
 
-    fetchMoviesTrending();
-  });
+    fetchMovies();
+  }, []);
 
   return (
     <div>
@@ -44,7 +37,5 @@ const HomePage = () => {
     </div>
   );
 };
-
-
 
 export default HomePage;

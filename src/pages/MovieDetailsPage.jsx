@@ -1,5 +1,6 @@
 import React, { useEffect, useState, useRef, Suspense } from 'react';
 import { Link, Outlet, useParams, useLocation } from 'react-router-dom';
+import { fetchMovieDetails } from 'services/MovieAPI';
 
 const MovieDetailsPage = () => {
   const { movieId } = useParams();
@@ -8,20 +9,12 @@ const MovieDetailsPage = () => {
   const backLinkLocationRef = useRef(location.state?.from ?? '/movies');
 
   useEffect(() => {
-    const fetchMovieDetails = async () => {
-      try {
-        const apiKey = 'af8f22ea7957eefc6025d5ff3672559f';
-        const response = await fetch(
-          `https://api.themoviedb.org/3/movie/${movieId}?api_key=${apiKey}&append_to_response=credits`
-        );
-        const data = await response.json();
-        setMovieDetails(data);
-      } catch (error) {
-        console.error('Error fetching movie details:', error);
-      }
+    const fetchMovie = async () => {
+      const details = await fetchMovieDetails(movieId);
+      setMovieDetails(details);
     };
 
-    fetchMovieDetails();
+    fetchMovie();
   }, [movieId]);
 
   if (!movieDetails) {
